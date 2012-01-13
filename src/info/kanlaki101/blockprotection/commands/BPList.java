@@ -1,6 +1,7 @@
 package info.kanlaki101.blockprotection.commands;
 
 import info.kanlaki101.blockprotection.BlockProtection;
+import info.kanlaki101.blockprotection.utilities.BPConfigHandler;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -21,22 +22,20 @@ public class BPList implements CommandExecutor {
 		String noperm = "You do not have permission to use this command.";
 		ChatColor YELLOW = ChatColor.YELLOW;
 		
-		if (args.length > 1) return true; //Too many arugments
+		if (args.length > 1) return true; //Too many arguments
 		
-		if (commandLabel.equalsIgnoreCase("bplist")) {
-			pl.loadFriendsList();
+		if (cmd.getName().equalsIgnoreCase("bplist")) {
+			BPConfigHandler.loadFriendsList();
 			if (args.length > 0) return true; 
 			if (!pl.isAuthorized(p, "bp.friend")) { //No permissions
 				p.sendMessage(YELLOW + noperm);
 				return true;
 			}
-			if (pl.friendslist.getList(player) == null) { //Check if player has a friends list
+			if (BPConfigHandler.getFriendslist(player) == null) { //Check if player has a friends list
 				p.sendMessage(YELLOW + "You do not have a friends list.");
 			}
 			else {
-				String friendslist = pl.friendslist.getList(player).toString(); //Convert friends list to a string
-				friendslist.replace("[", "");
-				friendslist.replace("]", "");
+				String friendslist = BPConfigHandler.getFriendslist(player).toString(); //Convert friends list to a string
 				p.sendMessage(YELLOW + "Friends: " + ChatColor.WHITE + friendslist);
 			}
 		}

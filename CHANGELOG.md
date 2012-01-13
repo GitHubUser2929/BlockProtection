@@ -1,5 +1,16 @@
 Changelog
 =
+v2.5.3 (01/12/2012)
+--
+	* Lots of code revision
+	* Block breaks are now cancelled when holding the "utility-tool"
+	* /bptool command now checks to see if your inventory is full
+	* Moved all configuration items to a new ConfigHandler class
+	* Other things I can't remember....
+
+v2.5.2 (01/03/2012)
+--
+	* Minor code revisions
 
 v2.5.1 (12/30/2011)
 --
@@ -21,7 +32,7 @@ v2.5 (12/15/2011)
        
        * Renamed "Buddy System" to "Friends System" (Friends List doesn't sound so lame)
        
-       *Moved all "Friends System" commands to their own class
+       * Moved all "Friends System" commands to their own class
            - Fixed /bpadd command. It no longer throws errors when trying to add friends when
              your friends list doesn't really exist
            - Fixed /bpremove command throwing NPE error when checking if your friends list

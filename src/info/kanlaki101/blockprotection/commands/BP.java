@@ -19,7 +19,8 @@ public class BP implements CommandExecutor {
 		ChatColor YELLOW = ChatColor.YELLOW;
 		
 		if (args.length > 0) return true;
-		if (commandLabel.equalsIgnoreCase("bp")) {
+		
+		if (cmd.getName().equalsIgnoreCase("bp")) {
 			if (!(sender instanceof Player)) return true;
 			
 			Player p = (Player) sender;

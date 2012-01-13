@@ -1,6 +1,6 @@
 name: BlockProtection
 main: info.kanlaki101.blockprotection.BlockProtection
-version: 2.5.2
+version: 2.5.3
 author: Kanlaki101
 depend: [Vault]
 
@@ -28,7 +28,7 @@ commands:
     usage: /<command>
   bptool:
     description: Gives the player 1 of the utilitytool
-    usage: /<command>     
+    usage: /<command>
     
 permissions:
     bp.*:
@@ -39,7 +39,7 @@ permissions:
             bp.reload: true
             bp.user: true
     bp.admin:
-        description: Allows players bypass BlockProtection, add blocks manually, and get the utility tool
+        description: Allows players to bypass BlockProtection, add blocks manually, and get the utility tool
         default: op
     bp.friend:
         description: Allows access to all friends list features

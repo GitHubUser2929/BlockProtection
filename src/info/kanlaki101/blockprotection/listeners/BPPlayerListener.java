@@ -2,6 +2,7 @@ package info.kanlaki101.blockprotection.listeners;
 
 import info.kanlaki101.blockprotection.BlockProtection;
 import info.kanlaki101.blockprotection.utilities.BPBlockLocation;
+import info.kanlaki101.blockprotection.utilities.BPConfigHandler;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -22,42 +23,34 @@ public class BPPlayerListener extends PlayerListener{
 	
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		String player = event.getPlayer().getName();
-		if (pl.config.getBoolean("enable-by-default") == true) { //If block protection is enabled by default
-			pl.Users.add(player); //Add player name to the array list
-		}
-		if (pl.config.getBoolean("enable-bypass-by-default") == true) { //If they want admin bypass on by default
-			pl.UsersBypass.add(player); //Add player name to the bypass array list
-		}
+		BPConfigHandler.loadConfig();
+		if (BPConfigHandler.enableByDefault() == true) pl.Users.add(player); //Enable automatic protection for that player
+		if (BPConfigHandler.bypassByDefault() == true) pl.UsersBypass.add(player); //Enable automatic bypass for that admin
 	}
 	
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		String player = event.getPlayer().getName();
-		if (pl.Users.contains(player)) { //Check if the block protection array contains that player
-			pl.Users.remove(player); //Remove player name from the array list
-		} 
-		else if (pl.UsersBypass.contains(player)) {
-			pl.UsersBypass.remove(player); //Remove mod/admin from the bypass array list
-		}
+		if (pl.Users.contains(player)) pl.Users.remove(player); //Remove them from the protection array
+		if (pl.UsersBypass.contains(player)) pl.UsersBypass.remove(player); //Remove the admin from the bypass array
 	}
 	
 	
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
-		if (e.getItem() == null)
-			return;
+		if (e.getItem() == null) return;
+		int item = p.getItemInHand().getTypeId();
 		
-		//Checks if the player is using the utility tool, and if they have the permission to view block information
-		if (e.getItem().getTypeId() == pl.config.getInt("utilitytool"))
-			if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
-				if (p.hasPermission("bp.user"))
-					blockInfo(e);
-		
-		//Checks if the player is using the utility tool, and if they have the permission to add blocks to the database
-		if (e.getItem().getTypeId() == pl.config.getInt("utilitytool"))
-			if (e.getAction() == Action.LEFT_CLICK_BLOCK)
-				if (p.hasPermission("bp.admin"))
-					addBlock(e);
-		
+		if (BPConfigHandler.getUtilTool() == item) {
+			if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				if (!pl.isAuthorized(p, "bp.user")) return;
+				blockInfo(e); //If player has permission, show them who owns the block
+			}
+			
+			if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+				if (!pl.isAuthorized(p, "bp.admin")) return;
+				addBlock(e); //If player has permission, TRY to add the block to the database
+			}
+		}
 	}
 	
 	
@@ -81,12 +74,12 @@ public class BPPlayerListener extends PlayerListener{
 			p.sendMessage(YELLOW + "Can not add. Block already owned.");
 		}
 		else {
-			if (!pl.config.getList("exclude").contains(blockID)) {
-				pl.database.put(blockLoc, e.getPlayer().getName()); //Adds block to the database.
+			if (!BPConfigHandler.getBlacklist().contains(blockID)) {
+				pl.database.put(blockLoc, p.getName()); //Adds block to the database.
 				p.sendMessage(YELLOW + "Block added to the database.");
 			}
 			else {
-				p.sendMessage(YELLOW + "Can not add block. It is on the exclude list.");
+				p.sendMessage(YELLOW + "Can not add block. It is on the blacklist.");
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package info.kanlaki101.blockprotection.commands;
 
 import info.kanlaki101.blockprotection.BlockProtection;
+import info.kanlaki101.blockprotection.utilities.BPConfigHandler;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,22 +20,22 @@ public class BPReload implements CommandExecutor {
 		ChatColor YELLOW = ChatColor.YELLOW;
 
 		String reload = "[BlockProtection] Reloaded from config.";
-		if (commandLabel.equalsIgnoreCase("bpreload")) {
+		if (cmd.getName().equalsIgnoreCase("bpreload")) {
 			if (!(sender instanceof Player)) { //If command is sent from console
 				pl.log.info(reload); //Log to console
-				pl.loadConfig(); //Reload settings from the config.yml file
+				BPConfigHandler.loadConfig(); //Reload settings from the config.yml file
 			}
 			else {
 				Player p = (Player) sender;
 				String bpp = pl.prefix + p.getName();
 				if (p.hasPermission("bp.reload")) { //No permissions
 					p.sendMessage(YELLOW + pl.prefix + "Reloaded from config.");
-					pl.loadConfig(); //Reload settings from the config.yml file
+					BPConfigHandler.loadConfig(); //Reload settings from the config.yml file
 					pl.log.info(bpp +" reloaded config.");
 				}
 				else {
 					p.sendMessage(YELLOW + noperm);
-					if (pl.advLog()) pl.log.warning(bpp + " attempted to use command: 'bpreload'.");
+					if (BPConfigHandler.advLog() == true) pl.log.warning(bpp + " attempted to use command: 'bpreload'.");
 				}
 			}
 		}

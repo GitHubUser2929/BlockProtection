@@ -1,6 +1,7 @@
 package info.kanlaki101.blockprotection.commands;
 
 import info.kanlaki101.blockprotection.BlockProtection;
+import info.kanlaki101.blockprotection.utilities.BPConfigHandler;
 
 import java.util.Arrays;
 
@@ -17,15 +18,17 @@ public class BPAdd implements CommandExecutor {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		if (!(sender instanceof Player)) return true; //Sender is not in-game
+		if (!(sender instanceof Player)) return true; //Sender is not a player
 		Player p = (Player)sender;
 		String player = p.getName();
 		String noperm = "You do not have permission to use this command.";
 		ChatColor YELLOW = ChatColor.YELLOW;
 		
-		if (args.length > 1) return true; //Too many arugments
-		if (commandLabel.equalsIgnoreCase("bpadd")) {
-			pl.loadFriendsList();
+		if (args.length > 1) return true; //Too many arguments
+		
+		if (cmd.getName().equalsIgnoreCase("bpadd")) {
+			BPConfigHandler.loadConfig();
+			BPConfigHandler.loadFriendsList();
 			if (!pl.isAuthorized(p, "bp.friend")) { //No permissions
 				p.sendMessage(YELLOW + noperm);
 				return true;
@@ -35,19 +38,19 @@ public class BPAdd implements CommandExecutor {
 				return true;
 			}
 			
-			if (pl.friendslist.getList(player) ==  null) { //Check if the player already has a buddy list
+			if (BPConfigHandler.getFriendslist(player) ==  null) { //Check if the player already has a friends list
 				String [] list = {args[0]}; //Since player doens't have a friends list, make them one
-				pl.friendslist.set(player, Arrays.asList(list)); 
+				BPConfigHandler.friendslist.set(player, Arrays.asList(list)); 
 			}
 			else {
-				if (pl.friendslist.getList(player).contains(args[0])) { //Check if the player is already on their buddy list
+				if (BPConfigHandler.getFriendslist(player).contains(args[0])) { //Check if the player is already on their friends list
 					p.sendMessage(YELLOW + args[0] + " is already on your friends list.");
 					return true;
 				}
-				pl.friendslist.getList(player).add(0, args[0]); //Add player to the database
+				BPConfigHandler.getFriendslist(player).add(0, args[0]); //Add player to their friends list
 			}
 			p.sendMessage(YELLOW + args[0] + " has been added to your friends list.");
-			pl.saveFriendsList(); //Save
+			BPConfigHandler.saveFriendsList(); //Save
 		}
 			
 	return true;

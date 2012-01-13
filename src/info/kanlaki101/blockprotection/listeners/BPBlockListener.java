@@ -2,6 +2,7 @@ package info.kanlaki101.blockprotection.listeners;
 
 import info.kanlaki101.blockprotection.BlockProtection;
 import info.kanlaki101.blockprotection.utilities.BPBlockLocation;
+import info.kanlaki101.blockprotection.utilities.BPConfigHandler;
 
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -23,7 +24,7 @@ public class BPBlockListener extends BlockListener {
 		if (pl.Users.contains(player)) { //Checks if user has BlockProctection enabled/disabled
 			Block block = e.getBlockPlaced();
 			int blockID = block.getTypeId();
-			if (!pl.config.getList("exclude").contains(blockID)) { //Check is the block is in the exclude list
+			if (!BPConfigHandler.getBlacklist().contains(blockID)) { //Check is the block is in the exclude list
 				BPBlockLocation blockLoc = new BPBlockLocation(block);
 				pl.database.put(blockLoc, e.getPlayer().getName()); //Saves block to the database
 			}
@@ -40,8 +41,8 @@ public class BPBlockListener extends BlockListener {
 		if (pl.database.containsKey(blockLoc)) { //Checks to see if the block is in the database
 			if (!pl.database.get(blockLoc).equals(player)) { //If player trying to destroy the block isn't the owner
 				
-				if (!(pl.friendslist.getList(blockowner) == null)) { //Check if block owner has a friends list
-					if (pl.friendslist.getList(blockowner).contains(player)) {
+				if (!(BPConfigHandler.getFriendslist(blockowner) == null)) { //Check if block owner has a friends list
+					if (BPConfigHandler.getFriendslist(blockowner).contains(player)) {
 						pl.database.remove(blockLoc); //Allow player to break block
 					}
 					else {
@@ -59,6 +60,14 @@ public class BPBlockListener extends BlockListener {
 			}
 			else //Player is owner of the block
 				pl.database.remove(blockLoc); //Break the block and remove it from the database
+		}
+		
+		/*
+		*Check if the player is holding the "utility-tool" and has the admin permission. If so, do not let him break blocks"
+		*This is used for things that break instantly (redstone, saplings, etc)
+		*/
+		if (p.getItemInHand().getTypeId() == BPConfigHandler.getUtilTool()) {
+			if (pl.isAuthorized(p, "bp.admin")) e.setCancelled(true);
 		}
 	}
 }

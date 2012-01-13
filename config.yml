@@ -3,30 +3,35 @@
 # to type: /bp to start having their blocks protected. "true" is recommended.
 # Default: true
 enable-by-default: true
+# ==================================================================================
 # Players with the bp.admin permission will bypass block protection
 # automatically when they join the server. Set to false to make them type /bpadmin
 # when they need to remove a players block.
 # Default: false
 enable-bypass-by-default: false
+# ==================================================================================
 # The items listed below will not be protected.
 # You MUST use item ids.
-# Ex: By excluding 6, you will block sapling, redwood sapling, 
+# Ex: By blacklisting 6, you will block sapling, redwood sapling, 
 # and birch sapling from being protected.
-exclude:
+blacklist:
     - 6
-    - 104
-    - 105
-# Tool to use to view block owner or add blocks to the database. Default: wooden spade (ID:269)
-# The utility tool is used to view the owner of a block, or add blocks
-# to the database manually. Left-clicking adds block to the database.
-# Right-clicking will view who owns that block.
+    - 18
+    - 31
+    - 32
+# ==================================================================================
+# Tool to use to view a block's owner or to add blocks manually to the database.
+# Left-click with the "utility-tool" to manually add a block
+# Right-click with the "utility-tool" to view a block's owner.
 # Default utility tool is: WOOD_SPADE (ID: 269)
-# You must use the item id.
-utilitytool: 269 
+# You must use the item's ID.
+utility-tool: 269
+# ==================================================================================
 # Time in MINUTES between each database save.
 # Players on the server will be informed when the database is saving.
 # Default: 60  *Time must be a number*
 save-interval: 60
+# ==================================================================================
 # Advanced logging. Shows when your admins/mods are bypassing block protection, and
 # also shows if players without the correct permissions are trying to use the admin
 # commands. Set to true to display in console/save to log. Default: true
