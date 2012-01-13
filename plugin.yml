@@ -1,0 +1,52 @@
+name: BlockProtection
+main: info.kanlaki101.blockprotection.BlockProtection
+version: 2.5.2
+author: Kanlaki101
+depend: [Vault]
+
+commands:
+  bp:
+    description: Toggle BlockProtection on/off
+    usage: /<command>
+  bpadd:
+    description: Add a player to your friends list
+    usage: /<command>     
+  bpadmin:
+    description: Toggle BlockProtection bypass on/off
+    usage: /<command>
+  bpclear:
+    description: Clears your entire friends list
+    usage: /<command>    
+  bplist:
+    description: List all players from your friends list
+    usage: /<command>    
+  bpreload:
+    description: Reloads settings from config.yml
+    usage: /<command>
+  bpremove:
+    description: Remove a player from friends list
+    usage: /<command>
+  bptool:
+    description: Gives the player 1 of the utilitytool
+    usage: /<command>     
+    
+permissions:
+    bp.*:
+        description: Gives access to all BlockProtection features
+        children:
+            bp.admin: true
+            bp.friend: true
+            bp.reload: true
+            bp.user: true
+    bp.admin:
+        description: Allows players bypass BlockProtection, add blocks manually, and get the utility tool
+        default: op
+    bp.friend:
+        description: Allows access to all friends list features
+        default: true 
+    bp.reload:
+        description: Allows access to reload settings from the config.yml
+        default: op        
+    bp.user:
+        description: Allows players to view a blocks owner, and have their blocks protected
+        default: true         
