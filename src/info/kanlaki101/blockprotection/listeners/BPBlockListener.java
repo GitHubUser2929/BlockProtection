@@ -47,7 +47,7 @@ public class BPBlockListener extends BlockListener {
 					}
 					else {
 						e.setCancelled(true); //Cancel the block break. Player is not owner or friend
-						p.sendMessage(ChatColor.YELLOW + "You can not break blocks owned by: " + blockowner);
+						p.sendMessage(ChatColor.YELLOW + "Bloco portegido por: " + blockowner);
 					}
 				}
 				else if (pl.UsersBypass.contains(player)) { //Is player has admin bypass enabled
@@ -55,7 +55,7 @@ public class BPBlockListener extends BlockListener {
 				}
 				else {							
 					e.setCancelled(true); //Cancel the block break. Player is not owner, friends, or does not have permission to ignore ownership
-					p.sendMessage(ChatColor.YELLOW + "You can not break blocks owned by: " + blockowner);
+					p.sendMessage(ChatColor.YELLOW + "Bloco protegido por: " + blockowner);
 				} 
 			}
 			else //Player is owner of the block
